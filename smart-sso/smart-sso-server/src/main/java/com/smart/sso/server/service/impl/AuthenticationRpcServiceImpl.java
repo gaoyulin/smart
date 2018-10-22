@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.smart.sso.server.model.UserPermission;
+import com.smart.sso.server.service.UserPermissionService;
 import org.springframework.stereotype.Service;
 
 import com.smart.mvc.util.StringUtils;
@@ -26,6 +28,9 @@ public class AuthenticationRpcServiceImpl implements AuthenticationRpcService {
 	@Resource
 	private TokenManager tokenManager;
 
+	@Resource
+	private UserPermissionService userPermissionService;
+
 	@Override
 	public boolean validate(String token) {
 		return tokenManager.validate(token) != null;
@@ -43,12 +48,17 @@ public class AuthenticationRpcServiceImpl implements AuthenticationRpcService {
 	@Override
 	public List<RpcPermission> findPermissionList(String token, String appCode) {
 		if (StringUtils.isBlank(token)) {
-			return permissionService.findListById(appCode, null);
+			return permissionService.findListById(appCode, null,1);
 		}
 		else {
 			LoginUser user = tokenManager.validate(token);
 			if (user != null) {
-				return permissionService.findListById(appCode, user.getUserId());
+				List<UserPermission> byRoleId = userPermissionService.findByUserId(user.getUserId());
+				if(byRoleId.size()>0){
+					return permissionService.findListById(appCode, user.getUserId(),2);//2表示查询时给用户设置了单独权限，查询用户权限即可
+				}else{
+					return permissionService.findListById(appCode, user.getUserId(),1);//1表示查询时给用户未设置单独权限，需查询用户角色权限
+				}
 			}
 			else {
 				return new ArrayList<RpcPermission>(0);

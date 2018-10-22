@@ -23,5 +23,5 @@ public interface PermissionDao extends Dao<Permission, Integer> {
 	
 	public int deleteByAppIds(@Param("idList") List<Integer> idList);
 	
-	public List<RpcPermission> findListById(@Param("appCode") String appCode, @Param("userId") Integer userId);
+	public List<RpcPermission> findListById(@Param("appCode") String appCode, @Param("userId") Integer userId,@Param("type") Integer type);
 }

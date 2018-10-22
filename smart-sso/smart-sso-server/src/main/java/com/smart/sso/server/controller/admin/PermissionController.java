@@ -4,6 +4,10 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.smart.sso.server.common.LoginUser;
+import com.smart.sso.server.common.TokenManager;
+import com.smart.sso.server.model.UserPermission;
+import com.smart.sso.server.service.UserPermissionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +38,10 @@ public class PermissionController extends BaseController {
 	private PermissionService permissionService;
 	@Resource
 	private AppService appService;
+	@Resource
+	private TokenManager tokenManager;
+	@Resource
+	private UserPermissionService userPermissionService;
 
 	@ApiOperation("初始页")
 	@RequestMapping(method = RequestMethod.GET)
@@ -47,15 +55,28 @@ public class PermissionController extends BaseController {
 	public @ResponseBody List<Permission> nodes(
 			@ApiParam(value = "应用id") Integer appId,
 			@ApiParam(value = "角色id") Integer roleId,
+			@ApiParam(value = "用户id") Integer userId,
 			@ApiParam(value = "是否启用 ") Boolean isEnable) {
-		List<Permission> list = permissionService.findByAppId(appId, roleId, isEnable);
-		Permission permission = new Permission();
-		permission.setId(null);
-		permission.setParentId(-1);
-		permission.setName("根节点");
-		permission.setAppId(appId);
-		list.add(0, permission);
-		return list;
+		List<UserPermission> byRoleId = userPermissionService.findByUserId(userId);
+		if(byRoleId.size()>0){
+			List<Permission> permissionList = permissionService.findByAppUserId(appId, userId, isEnable);
+			Permission permission = new Permission();
+			permission.setId(null);
+			permission.setParentId(-1);
+			permission.setName("根节点");
+			permission.setAppId(appId);
+			permissionList.add(0, permission);
+			return permissionList;
+		}else{
+			List<Permission> list = permissionService.findByAppId(appId, roleId, isEnable);
+			Permission permission = new Permission();
+			permission.setId(null);
+			permission.setParentId(-1);
+			permission.setName("根节点");
+			permission.setAppId(appId);
+			list.add(0, permission);
+			return list;
+		}
 	}
 
 	@ApiOperation("新增/修改提交")

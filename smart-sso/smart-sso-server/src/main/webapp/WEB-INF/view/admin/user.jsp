@@ -67,6 +67,12 @@
 							url : "${_path}/admin/user/delete"
 						});
 					}},
+                    {text : '用户授权', clazz : 'btn-default', icon : 'fa fa-cog grey', permission : '/admin/role/allocate', handler : function(){
+                            if($table.validateSelected(true)){
+                                $.aceRedirect("${_path}/admin/userPermission?userId=" + $table.getSelectedItemKeys("id"));
+                            }
+
+                        }},
 					{text : '重置密码', clazz : 'btn-default', icon : 'fa fa-key grey', permission : '/admin/user/resetPassword', handler : function(){
 						$table.ajax({
 							url : "${_path}/admin/user/resetPassword",

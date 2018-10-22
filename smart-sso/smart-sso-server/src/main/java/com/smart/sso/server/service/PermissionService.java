@@ -21,6 +21,15 @@ public interface PermissionService extends Service<Permission, Integer> {
 	 * @return
 	 */
 	public List<Permission> findByAppId(Integer appId, Integer roleId, Boolean isEnable);
+
+	/**
+	 * 根据名称和应用ID查询
+	 * @param appId 应用ID
+	 * @param userId 角色ID
+	 * @param isEnable
+	 * @return
+	 */
+	public List<Permission> findByAppUserId(Integer appId, Integer userId, Boolean isEnable);
 	
 	/**
 	 * 删除权限
@@ -43,5 +52,5 @@ public interface PermissionService extends Service<Permission, Integer> {
 	 * @param userId 用户ID
 	 * @return
 	 */
-	public List<RpcPermission> findListById(String appCode, Integer userId);
+	public List<RpcPermission> findListById(String appCode, Integer userId,Integer type);
 }

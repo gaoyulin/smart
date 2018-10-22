@@ -75,6 +75,7 @@ public class PermissionFilter extends ClientFilter {
 
 		List<RpcPermission> menuList = new ArrayList<RpcPermission>();
 		Set<String> operateSet = new HashSet<String>();
+
 		for (RpcPermission menu : dbList) {
 			if (menu.getIsMenu()) {
 				menuList.add(menu);
