@@ -24,6 +24,15 @@
 		)
 	</insert>
 
+	<select id="findByUserId" parameterType="map" resultType="UserRole">
+		SELECT
+			*
+		FROM SYS_RE_USER_ROLE
+		WHERE 1 = 1
+		<if test="userId != null">
+			AND userId =#{userId}
+		</if>
+	</select>
 	<delete id="deleteByRoleIds" parameterType="map" statementType="PREPARED">
 		DELETE FROM SYS_RE_USER_ROLE
 		WHERE 1 = 1

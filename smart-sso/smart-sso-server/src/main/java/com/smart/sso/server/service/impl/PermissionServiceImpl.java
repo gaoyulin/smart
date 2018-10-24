@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import com.smart.sso.server.model.UserPermission;
+import com.smart.sso.server.model.*;
 import com.smart.sso.server.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.smart.mvc.service.mybatis.impl.ServiceImpl;
 import com.smart.sso.rpc.RpcPermission;
 import com.smart.sso.server.dao.PermissionDao;
-import com.smart.sso.server.model.Permission;
-import com.smart.sso.server.model.RolePermission;
 
 @Service("permissionService")
 public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission, Integer> implements PermissionService {
@@ -30,6 +28,10 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
 	private AppService appService;
 	@Resource
 	private PermissionJmsService permissionJmsService;
+
+	@Resource
+    private UserRoleService userRoleService;
+
 
 	@Autowired
 	public void setDao(PermissionDao dao) {
@@ -58,18 +60,36 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
 		return permissionList;
 	}
 	public List<Permission> findByAppUserId(Integer appId, Integer userId, Boolean isEnable) {
-		List<Permission> permissionList = dao.findByAppId(appId, isEnable);
-		if (userId != null) {
-			List<UserPermission> userPermissionList = userPermissionService.findByUserId(userId);
-			for (Permission permission : permissionList) {
-				for (UserPermission userPermission : userPermissionList) {
-					if (permission.getId().equals(userPermission.getPermissionId())) {
-						permission.setChecked(true);
-						break;
-					}
-				}
-			}
-		}
+        List<Permission> permissionList =null;
+        List<UserRole> userRoles = userRoleService.findByUserId(userId);
+        List<Integer> roleIds = new ArrayList<>();
+        for(UserRole userRole:userRoles){
+            roleIds.add(userRole.getRoleId());
+        }
+        List<UserPermission> byRoleId = userPermissionService.findByUserId(userId);
+        if(byRoleId.size()>0){
+            if (userId != null) {
+               permissionList = dao.findByRoleId(roleIds, true);
+                List<UserPermission> userPermissionList = userPermissionService.findByUserId(userId);
+                for (Permission permission : permissionList) {
+                    for (UserPermission userPermission : userPermissionList) {
+                        if (permission.getId().equals(userPermission.getPermissionId())) {
+                            permission.setChecked(true);
+                            break;
+                        }
+                    }
+                }
+            }
+        }else{
+
+            if (userId != null) {
+                permissionList = dao.findByRoleId(roleIds, true);
+                for (Permission permission : permissionList) {
+                    permission.setChecked(true);
+                }
+            }
+        }
+
 		return permissionList;
 	}
 

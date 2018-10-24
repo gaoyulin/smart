@@ -37,4 +37,9 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleDao, UserRole, Inte
 	public void deleteByUserIds(List<Integer> idList) {
 		dao.deleteByUserIds(idList);
 	}
+
+	@Override
+	public List<UserRole> findByUserId(Integer userId) {
+		return dao.findByUserId(userId);
+	}
 }

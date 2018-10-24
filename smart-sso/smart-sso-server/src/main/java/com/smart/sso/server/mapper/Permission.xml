@@ -52,18 +52,30 @@
 		</if>
 	</update>
 	
-	<select id="findByAppId" parameterType="map" resultType="Permission">   
-		SELECT * 
-     	FROM SYS_PERMISSION a
-     	WHERE 1 = 1
-		<if test="appId != null">
-			AND a.appId = #{appId} 
-		</if>
-		<if test="isEnable != null and isEnable == true">
-			AND a.isEnable = #{isEnable} 
-		</if>
-     	ORDER BY a.sort DESC 
+	<select id="findByRoleId" parameterType="map" resultType="Permission">
+        SELECT
+          p.*
+        FROM SYS_RE_ROLE_PERMISSION a
+        INNER JOIN SYS_PERMISSION p ON p.id = a.permissionId AND p.isEnable = 1
+        WHERE 1 = 1
+        <if test="idList != null">
+            AND a.roleId in <foreach collection="idList" item="item" open="(" separator="," close=")">#{item}</foreach>
+        </if>
+     	ORDER BY p.sort DESC
 	</select>
+
+    <select id="findByAppId" parameterType="map" resultType="Permission">
+        SELECT *
+        FROM SYS_PERMISSION a
+        WHERE 1 = 1
+        <if test="appId != null">
+            AND a.appId = #{appId}
+        </if>
+        <if test="isEnable != null and isEnable == true">
+            AND a.isEnable = #{isEnable}
+        </if>
+        ORDER BY a.sort DESC
+    </select>
 	
 	<delete id="deleteById" parameterType="list" statementType="PREPARED">
 		DELETE FROM SYS_PERMISSION

@@ -3,11 +3,13 @@ package com.smart.sso.server.controller.admin;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import com.smart.sso.server.common.LoginUser;
 import com.smart.sso.server.common.TokenManager;
 import com.smart.sso.server.model.UserPermission;
-import com.smart.sso.server.service.UserPermissionService;
+import com.smart.sso.server.service.*;
+import com.smart.sso.server.util.CookieUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +21,6 @@ import com.smart.mvc.validator.Validator;
 import com.smart.mvc.validator.annotation.ValidateParam;
 import com.smart.sso.server.controller.common.BaseController;
 import com.smart.sso.server.model.Permission;
-import com.smart.sso.server.service.AppService;
-import com.smart.sso.server.service.PermissionService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,6 +43,9 @@ public class PermissionController extends BaseController {
 	@Resource
 	private UserPermissionService userPermissionService;
 
+	@Resource
+	private UserRoleService userRoleService;
+
 	@ApiOperation("初始页")
 	@RequestMapping(method = RequestMethod.GET)
 	public String execute(Model model) {
@@ -56,9 +59,11 @@ public class PermissionController extends BaseController {
 			@ApiParam(value = "应用id") Integer appId,
 			@ApiParam(value = "角色id") Integer roleId,
 			@ApiParam(value = "用户id") Integer userId,
-			@ApiParam(value = "是否启用 ") Boolean isEnable) {
+			@ApiParam(value = "是否启用 ") Boolean isEnable, HttpServletRequest request) {
 		List<UserPermission> byRoleId = userPermissionService.findByUserId(userId);
-		if(byRoleId.size()>0){
+		String token = CookieUtils.getCookie(request, TokenManager.TOKEN);
+		LoginUser loginUser = tokenManager.validate(token);
+		if(userId!=null){
 			List<Permission> permissionList = permissionService.findByAppUserId(appId, userId, isEnable);
 			Permission permission = new Permission();
 			permission.setId(null);

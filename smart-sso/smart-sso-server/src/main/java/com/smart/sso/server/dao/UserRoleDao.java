@@ -16,7 +16,10 @@ public interface UserRoleDao extends Dao<UserRole, Integer> {
 
 	public UserRole findByUserRoleId(@Param("userId") Integer userId, @Param("roleId") Integer roleId);
 
+	public List<UserRole> findByUserId(@Param("userId") Integer userId);
+
 	public int deleteByRoleIds(@Param("idList") List<Integer> idList);
+
 
 	public int deleteByUserIds(@Param("idList") List<Integer> idList);
 }

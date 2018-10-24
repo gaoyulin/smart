@@ -19,7 +19,13 @@ public interface UserRoleService extends Service<UserRole, Integer> {
 	 * @return
 	 */
 	public UserRole findByUserRoleId(Integer userId, Integer roleId);
-	
+
+	/**
+	 * 根据用户ID
+	 * @param userId 用户ID
+	 * @return
+	 */
+	public List<UserRole> findByUserId(Integer userId);
 	/**
 	 * 根据用户ID给用户分配角色
 	 * @param userId 用户ID
