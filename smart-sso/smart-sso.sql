@@ -101,6 +101,18 @@ INSERT INTO `SYS_PERMISSION` VALUES ('56', '82', null, '底部菜单配置', '/a
 INSERT INTO `SYS_PERMISSION` VALUES ('59', '81', null, '菜单2', '/admin/menu2', '90', '1', '1', '');
 
 -- ----------------------------
+-- Table structure for `SYS_RE_USER_PERMISSION`
+-- ----------------------------
+DROP TABLE IF EXISTS `SYS_RE_USER_PERMISSION`;
+CREATE TABLE `SYS_RE_USER_PERMISSION` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) NOT NULL COMMENT '角色ID',
+  `permissionId` int(11) NOT NULL COMMENT '权限ID',
+  `appId` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=356 DEFAULT CHARSET=utf8 COMMENT='用户权限表';
+
+-- ----------------------------
 -- Table structure for `SYS_RE_ROLE_PERMISSION`
 -- ----------------------------
 DROP TABLE IF EXISTS `SYS_RE_ROLE_PERMISSION`;
