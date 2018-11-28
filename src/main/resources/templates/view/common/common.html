@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="common">
+    <!--<meta charset="utf-8">-->
+    <!--<title th:replace="${title}">The awesome application</title>-->
+    <!--<title th:text="${param.title}+'-'+${application.ystemName}"></title>-->
+
+    <!-- 文本框 -->
+    <link rel="stylesheet" href="/assets/css/jquery-ui.custom.css" th:href="@{/assets/css/jquery-ui.custom.css}"/>
+    <!-- 多选框 -->
+    <link rel="stylesheet" href="/assets/css/bootstrap-multiselect.css" th:href="@{/assets/css/bootstrap-multiselect.css}"/>
+    <!-- 颜色选择  -->
+    <link rel="stylesheet" href="/assets/css/colorpicker.css" th:href="@{/assets/css/colorpicker.css}" />
+    <!-- 时间  -->
+    <link rel="stylesheet" href="/assets/css/bootstrap-timepicker.css" th:href="@{/assets/css/bootstrap-timepicker.css}"/>
+    <!-- 日期、日期+时间、日期范围  -->
+    <link rel="stylesheet" href="/assets/css/daterangepicker.css" th:href="@{/assets/css/daterangepicker.css}"/>
+    <!-- 提示框  -->
+    <link rel="stylesheet" href="/assets/css/jquery.gritter.css" th:href="@{/assets/css/jquery.gritter.css}"/>
+    <!-- 拖拽式单文件上传 -->
+    <link rel="stylesheet" href="/assets/css/dropzone.css" th:href="@{/assets/css/dropzone.css}"/>
+    <link rel="stylesheet" href="/assets/css/uploadifive.css" th:href="@{/assets/css/uploadifive.css}"/>
+
+    <!--[if lte IE 8]>
+    <script src="/assets/js/excanvas.js" th:src="@{/assets/css/jquery-ui.custom.css}"></script>
+    <![endif]-->
+    <!--/* Per-page placeholder for additional links */-->
+    <!--<th:block th:replace="${links}" />-->
+    <!--&lt;!&ndash;/* Per-page placeholder for additional styles */&ndash;&gt;-->
+    <!--<th:block th:replace="${styles}" />-->
+    <script th:inline="javascript">
+        var serverPath = [[${application.serverPath}]];
+        var staticPath = [[${application.staticPath}]];
+        console.log(serverPath+"======"+staticPath);
+    </script>
+    <script type="text/javascript">
+        var scripts = [
+            // Form提交Json转换
+            staticPath+"/custom/jquery.form.min.js",
+            // 列表
+            staticPath+"/custom/jquery.table.min.js?v=" + Math.random(),
+            // 时间
+            staticPath+"/assets/js/date-time/bootstrap-timepicker.js",
+            // 时间支持
+            staticPath+"/assets/js/date-time/moment.js",
+            // 时间支持
+            staticPath+"/assets/js/date-time/i18n/moment.zh-CN.js",
+            // 日期范围
+            staticPath+"/assets/js/date-time/daterangepicker.js",
+            // 确认框
+            staticPath+"/assets/js/bootbox.js",
+            staticPath+"/custom/assets/bootbox.custom.js",
+            // 自动隐藏的提醒框
+            staticPath+"/assets/js/jquery.gritter.js",
+            staticPath+"/custom/assets/jquery.gritter.custom.js",
+            // UI
+            staticPath+"/assets/js/jquery-ui.custom.js",
+            // 文件上传
+            staticPath+"/assets/js/dropzone.js",
+            staticPath+"/assets/js/jquery.uploadifive.min.js",
+            staticPath+"/custom/ajaxfileupload.js",
+            // 验证
+            staticPath+"/custom/jquery.validate-2.0.min.js",
+            staticPath+"/custom/jquery.validate-2.0.custom.min.js"
+        ];
+    </script>
+
+    <style type="text/css">
+        .sidebar + .main-content {
+            margin-left: 193px;
+        }
+    </style>
+
+</head>

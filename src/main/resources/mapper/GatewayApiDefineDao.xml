@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.sso.server.dao.GatewayApiDefineDao">
+  <resultMap id="BaseResultMap" type="com.smart.sso.server.model.GatewayApiDefine">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="service_id" jdbcType="VARCHAR" property="serviceId" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="retryable" jdbcType="BIT" property="retryable" />
+    <result column="is_enable" jdbcType="BIT" property="isEnable" />
+    <result column="strip_prefix" jdbcType="BIT" property="stripPrefix" />
+    <result column="app_name" jdbcType="VARCHAR" property="appName" />
+    <result column="sys_app_id" jdbcType="VARCHAR" property="sysAppId" />
+    <result column="gmt_create_date" jdbcType="TIMESTAMP" property="gmtCreateDate" />
+    <result column="gmt_update_date" jdbcType="TIMESTAMP" property="gmtUpdateDate" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, path, service_id, url, retryable, is_enable, strip_prefix, app_name, gmt_create_date, 
+    gmt_update_date,sys_app_id
+  </sql>
+
+    <select id="findByAll" resultMap="BaseResultMap">
+      select
+        <include refid="Base_Column_List" />
+        from gateway_api_define
+    </select>
+
+  <select id="get" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from gateway_api_define
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteById" parameterType="java.lang.Integer">
+    delete
+    from gateway_api_define
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.smart.sso.server.model.GatewayApiDefine">
+    insert into gateway_api_define
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="path != null">
+        path,
+      </if>
+      <if test="serviceId != null">
+        service_id,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="retryable != null">
+        retryable,
+      </if>
+      <if test="isEnable != null">
+        is_enable,
+      </if>
+      <if test="stripPrefix != null">
+        strip_prefix,
+      </if>
+      <if test="appName != null">
+        app_name,
+      </if>
+      <if test="gmtCreateDate != null">
+        gmt_create_date,
+      </if>
+      <if test="gmtUpdateDate != null">
+        gmt_update_date,
+      </if>
+      <if test="sysAppId != null">
+        sys_app_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="path != null">
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceId != null">
+        #{serviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="retryable != null">
+        #{retryable,jdbcType=BIT},
+      </if>
+      <if test="isEnable != null">
+        #{isEnable,jdbcType=BIT},
+      </if>
+      <if test="stripPrefix != null">
+        #{stripPrefix,jdbcType=INTEGER},
+      </if>
+      <if test="appName != null">
+        #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreateDate != null">
+        #{gmtCreateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtUpdateDate != null">
+        #{gmtUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sysAppId != null">
+        #{sysAppId},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.smart.sso.server.model.GatewayApiDefine">
+    update gateway_api_define
+    <set>
+      <if test="path != null">
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceId != null">
+        service_id = #{serviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="retryable != null">
+        retryable = #{retryable,jdbcType=BIT},
+      </if>
+      <if test="isEnable != null">
+        is_enable = #{isEnable,jdbcType=BIT},
+      </if>
+      <if test="stripPrefix != null">
+        strip_prefix = #{stripPrefix,jdbcType=INTEGER},
+      </if>
+      <if test="appName != null">
+        app_name = #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreateDate != null">
+        gmt_create_date = #{gmtCreateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtUpdateDate != null">
+        gmt_update_date = #{gmtUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sysAppId != null">
+        sys_app_id = #{sysAppId},
+      </if>
+    </set>
+    where 1=1
+    <if test="id != null">
+       and  id = #{id,jdbcType=INTEGER}
+    </if>
+    <if test=" ids != null ">
+      and  id IN
+      <foreach collection="ids" separator="," open="(" close=")" item="id" index="index">
+        #id
+      </foreach>
+    </if>
+  </update>
+</mapper>

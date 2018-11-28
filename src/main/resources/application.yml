@@ -1,0 +1,114 @@
+server:
+  port: 6604
+  context-path: /smart-sso-server
+#服务名
+spring:
+  application:
+    name: smart-sso-server
+  session:
+    store-type: none
+    # REDIS (RedisProperties)
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/smart-sso
+    username: root
+    password: 123456
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    filters: stat,wall,log4j
+    maxActive: 20
+    maxPoolPreparedStatementPerConnectionSize: 20
+    maxWait: 60000
+    minEvictableIdleTimeMillis: 300000
+    minIdle: 5
+    poolPreparedStatements: true
+    testOnBorrow: false
+    testOnReturn: false
+    testWhileIdle: true
+    timeBetweenEvictionRunsMillis: 60000
+    validationQuery: SELECT 1 FROMDUAL
+    datasourceinitialSize: 5
+  #thymelea模板配置
+  thymeleaf:
+    prefix: classpath:/templates/view/
+    content-type: text/html
+    mode: LEGACYHTML5
+    cache: false
+#  spring.resources.chain.strategy.content.paths=/**
+  cache:
+    redis:
+      time-to-live:
+#log配置文件
+logging:
+  config: classpath:logback-boot.xml
+#log路径
+  path: E:/idea/dds/dds-getway/target/target/logs/
+#zuul路由配置为serviceid时生效
+ribbon:
+#对当前服务的重试次数
+  MaxAutoRetries: 3
+#切换相同Server的次数
+  MaxAutoRetriesNextServer: 0
+  connectTimeout: 3000
+  readTimeout: 20000
+#zuul路由配置为url时生效
+zuul:
+  retryable: true
+  host:
+    connect-timeout-millis: 3000
+    socket-timeout-millis: 20000
+#Ribbon 超时时间设置
+#ribbon:
+#  ConnectTimeout: 500
+#  ReadTimeout:  3000
+#feigh超时配置
+feign:
+  client:
+    config:
+      default:
+       connectTimeout: 3000
+    readTimeout: 20000
+    loggerLevel: basic
+  hystrix:
+      enabled: true
+rocketmq:
+  producer:
+    # 发送同一类消息的设置为同一个group，保证唯一,默认不需要设置，rocketmq会使用ip@pid(pid代表jvm名字)作为唯一标示
+    groupName: vehicleProducerGroup
+    #mq的nameserver地址
+    namesrvAddr: 123.206.175.47:9876;182.254.210.72:9876
+    #如果需要同一个jvm中不同的producer往不同的mq集群发送消息，需要设置不同的instanceName
+    instanceName: vehicleProducer
+    #topic名称
+    topic: TEST
+    #根据实际情况设置消息的tag
+    tag: TEST
+    #消息最大长度
+    maxMessageSize: 131072 # 1024*128
+    #发送消息超时时间
+    sendMsgTimeout: 10000
+  consumer:
+    namesrvAddr: 123.206.175.47:9876;182.254.210.72:9876
+    groupName: vehicleProducerGroup
+    topic: sms
+    tag: verifycode
+    consumeThreadMin: 20
+    consumeThreadMax: 200
+mybatis:
+  typeAliasesPackage: com.sofmit.dds.sso
+  mapperLocations: classpath:mapper/*.xml
+
+
+
+
+#zuul:
+#  routes:
+#    dds:
+#      path: /dds/**
+#      url: http://10.10.1.166:8080/dds/
+#    FITS_Interface:
+#      path: /FITS_Interface/**
+#      url: http://10.10.1.166:8080/FITS_Interface/
+#    zyls:
+#      path: /zyls/**
+#      url: http://10.10.1.166:8080/zyls/

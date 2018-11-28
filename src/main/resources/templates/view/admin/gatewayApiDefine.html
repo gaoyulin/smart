@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<header id="header" th:include="common/common::html"></header>
+<div class="page-header">
+	<h1>
+		路由列表
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="widget-box">
+					<div class="widget-header widget-header-small">
+						<h5 class="widget-title lighter">搜索栏</h5>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main">
+							<form id="_form" class="form-inline">
+								<label>
+									<label class="control-label" for="form-field-1">应用名： </label>
+									<input name="appName" type="text" class="form-data input-medium search-data">
+								</label>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<div>
+					<div class="dataTables_wrapper form-inline no-footer">
+						<table id="_table" class="table table-striped table-bordered table-hover dataTable no-footer">
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- page specific plugin scripts -->
+<script type="text/javascript">
+	$('.page-content-area').ace_ajax('loadScripts', scripts, function() {
+		jQuery(function($) {
+			// 列表
+    		var $table = $("#_table").table({
+    			url : serverPath+"/admin/gateway/list",
+    			formId : "_form",
+				tools : [
+					{text : '新增', clazz : 'btn-info', icon : 'fa fa-plus-circle blue', permission : '/admin/gateway/edit', handler : function(){
+						$.aceRedirect(serverPath+"/admin/gateway/edit");
+					}},
+					{text : '禁用', clazz : 'btn-warning', icon : 'fa fa-lock orange', permission : '/admin/gateway/enable', handler : function(){
+						$table.ajaxEnable({url : serverPath+"/admin/gateway/enable"}, false);
+					}},
+					{text : '启用', clazz : 'btn-success', icon : 'fa fa-unlock green', permission : '/admin/gateway/enable', handler : function(){
+						$table.ajaxEnable({url : serverPath+"/admin/gateway/enable"}, true);
+					}},
+					{text : '删除', clazz : 'btn-danger', icon : 'fa fa-trash-o red', permission : '/admin/gateway/delete', handler : function(){
+						$table.ajaxDelete({
+							confirm : "删除用户会关联对应的角色、权限，确认要删除?",
+							url : serverPath+"/admin/gateway/delete"
+						});
+					}}
+				],
+				columns : [
+			        {field:'id', hide : true},
+			        {field:'isEnable', hide : true},
+			        {field:'appName', title:'应用名称', align:'left'},
+			        {field:'path', title:'访问前缀', mobileHide : true},
+			        {field:'serviceId', title:'服务ID', mobileHide : true},
+			        {field:'url', title:'访问地址', mobileHide : true},
+			        {field:'isEnable', title:'是否启用', replace : function (d){
+				        if(d.isEnable)
+				        	return "<span class='label label-sm label-success'>启用</span>";
+			        	else
+			        		return "<span class='label label-sm label-warning'>禁用</span>";
+			        }},
+			        {field:'gmtCreateDate', title:'创建时间', mobileHide : true}
+				],
+				operate : [
+					{text : '修改', clazz : 'blue', icon : 'fa fa-pencil', permission : '/admin/gateway/edit', handler : function(d, i){
+
+					    $.aceRedirect(serverPath+"/admin/gateway/edit?id=" + d.id);
+					}},
+					{text : '禁用', clazz : 'orange', icon : 'fa fa-lock', permission : '/admin/gateway/enable',
+						handler : function(){
+							$table.ajaxEnable({url : serverPath+"/admin/gateway/enable"}, false);
+						},
+						show : function(d){
+							return d.isEnable;
+						}
+					},
+					{text : '启用', clazz : 'green', icon : 'fa fa-unlock', permission : '/admin/gateway/enable',
+						handler : function(){
+							$table.ajaxEnable({url : serverPath+"/admin/gateway/enable"}, true);
+						},
+						show : function(d){
+							return !d.isEnable;
+						}
+					},
+					{text : '删除', clazz : 'red', icon : 'fa fa-trash-o', permission : '/admin/gateway/delete', handler : function(d, i){
+						console.log($table);
+                            $table.ajaxDelete({
+							confirm : "删除用户会关联对应的角色、权限，确认要删除?",
+							url : serverPath+"/admin/gateway/delete"
+						});
+					}}
+				],
+				after : function(){
+					// 权限处理
+					$.permission();
+				}
+			});
+			//搜索
+			$(".search-data").keyup(function () { 
+				$table.search();
+			});
+			// 取消
+			$("#_cancel").click(function(){
+				$table.search();
+			});
+		});
+	});
+</script>
+</html>
